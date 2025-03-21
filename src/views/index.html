@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wsPokemon</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/src/assets/fonts/font.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- Pantalla de Inicio -->
+    <div class="screen start-screen active">
+        <div class="header">
+            <h1 class="title">WORD<span class="accent">SHAKE</span></h1>
+            <div class="decorative-line"></div>
+        </div>
+        
+        <div class="main-menu">
+            <button class="btn primary play-btn">
+                <span class="material-icons">play_arrow</span>
+                Jugar Ahora
+            </button>
+            <button class="btn secondary instructions-btn">
+                <span class="material-icons">help_outline</span>
+                Instrucciones
+            </button>
+        </div>
+
+        <div class="footer">
+            <div class="version">v1.0</div>
+            <div class="credits">Creado por Manifesto dei rospi</div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Juego -->
+    <div class="screen game-screen">
+        <div class="game-header">
+            <button class="btn icon back-btn">
+                <span class="material-icons">arrow_back</span>
+            </button>
+            <div class="game-info">
+                <div class="score-box">
+                    <span class="material-icons">emoji_events</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="timer-box">
+                    <span class="material-icons">timer</span>
+                    <span id="timer">03:00</span>
+                </div>
+            </div>
+            <button class="btn icon help-btn">
+                <span class="material-icons">info</span>
+            </button>
+        </div>
+
+        <div class="word-preview"></div>
+
+        <div class="game-grid"></div>
+
+        <div class="validation-message"></div>
+    </div>
+
+    <!-- Modal de Instrucciones -->
+    <div class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Instrucciones del Juego</h2>
+                <button class="close-modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <ul class="instructions-list">
+                    <li>
+                        <span class="material-icons">schedule</span>
+                        <span>Tienes <strong>3 minutos</strong> para formar palabras</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">text_format</span>
+                        <span>Mínimo <strong>3 letras</strong> por palabra</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">warning</span>
+                        <span>No se permiten nombres propios</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">military_tech</span>
+                        <span>+ puntos por palabras largas</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
