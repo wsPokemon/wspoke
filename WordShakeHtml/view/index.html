@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordshake Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Pantalla de Inicio -->
+    <div class="start-screen view-section">
+        <h1>✨ Wordshake Game ✨</h1>
+        
+        <div class="button-container">
+            <button class="play-btn">Jugar Ahora</button>
+            <button class="instructions-btn">Ver Instrucciones</button>
+        </div>
+
+        <div class="credits">
+            Creado por Manifesto dei rospi | Versión 1.0
+        </div>
+    </div>
+
+    <!-- Pantalla de Desarrollo -->
+    <div class="game-container view-section">
+        <div class="coming-soon">
+            <h2>🚧 En Desarrollo 🚧</h2>
+            <p>¡Esta funcionalidad estará disponible pronto!</p>
+            <button class="back-btn">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instrucciones -->
+    <div class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>📚 Instrucciones del Juego</h2>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <ul>
+                    <li>🕒 Tienes <strong>3 minutos</strong> para formar palabras</li>
+                    <li>🔤 Mínimo <strong>3 letras</strong> por palabra</li>
+                    <li>⚡ Letras únicas por palabra</li>
+                    <li>🎯 Puntos por longitud de palabra</li>
+                    <li>❌ No se permiten nombres propios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/model/model.js"></script>
+    <script src="/view/view.js"></script>
+    <script src="/controller/controler.js"></script>
+</body>
+</html>
