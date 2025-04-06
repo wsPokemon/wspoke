@@ -1,0 +1,6 @@
+.qodo
+# node_modules
+# .vscode
+# eslint.config.mjs
+# package-lock.json
+# server.http
