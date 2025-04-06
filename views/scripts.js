@@ -257,14 +257,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.reset-word-btn').addEventListener('click', resetWord);
     document.querySelector('.submit-word-btn').addEventListener('click', validateWord);
     document.querySelector('.shuffle-btn').addEventListener('click', shuffleLetters);
-    document.addEventListener('keypress', function (e) {
-            if (document.getElementsByClassName('.game-screen') && e.key === 'r') {
-                shuffleLetters();
-            }
-            if (document.getElementsByClassName('.game-screen') && e.key === 'e') {
-                validateWord();
-            }
-    });
+
+    // Keyboard shortcuts (R: Reiniciar palabra, E: Validar palabra) descomentar para habilitar
+    // document.addEventListener('keypress', function (e) {
+    //         if (document.getElementsByClassName('.game-screen') && e.key === 'r') {
+    //             shuffleLetters();
+    //         }
+    //         if (document.getElementsByClassName('.game-screen') && e.key === 'e') {
+    //             validateWord();
+    //         }
+    // });
     
 
     document.querySelector('.play-again-btn').addEventListener('click', () => {
