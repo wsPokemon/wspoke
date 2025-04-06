@@ -1,0 +1,217 @@
+
+:root {
+  --primary: #2A2A72;
+  --secondary: #009FFD;
+  --accent: #FFA400;
+  --background: #1a1a2e;
+  --text: #ffffff;
+  --success: #2ecc71;
+  --error: #e74c3c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pokemon Pixel Font Regular';
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Pantallas */
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  position: relative;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Pantalla de Inicio */
+.start-screen {
+  text-align: center;
+}
+
+.header .title {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.decorative-line {
+  width: 200px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+  margin: 1rem auto;
+}
+
+.main-menu {
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.primary {
+  background: var(--secondary);
+  color: var(--text);
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  border: 2px solid var(--secondary);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Pantalla de Juego */
+.game-screen {
+  display: none;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.game-info {
+  display: flex;
+  gap: 2rem;
+}
+
+.score-box,
+.timer-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.letter-cell {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  aspect-ratio: 1;
+}
+
+.letter-cell:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.letter-cell.selected {
+  background: var(--secondary);
+  transform: scale(1.1);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--background);
+  border-radius: 15px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instructions-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+/* Mensajes de validación */
+.validation-message {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  display: none;
+}
+
+.validation-message.valid {
+  background: var(--success);
+  display: block;
+}
+
+.validation-message.invalid {
+  background: var(--error);
+  display: block;
+}
