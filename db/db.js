@@ -77,7 +77,37 @@ const dbQueries = {
                 }
             });
         });
-    }
+    },
+
+    //obtener el score del leaderboard por nombre
+    getScoreByName: (name) => {
+        return new Promise((resolve, reject) => {
+            db.get('SELECT score FROM leaderboard WHERE name = ?', [name], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    },
+
+    // Obtener leaderboard
+    getLeaderboard: () => {
+        return new Promise((resolve, reject) => {
+            db.all('SELECT * FROM leaderboard ORDER BY score LIMIT 10', (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            });
+        });
+    },
+
+    // Insertar nuevo registro en el leaderboard
+    insertLeaderboard: (name, score) => {
+        return new Promise((resolve, reject) => {
+            db.run('INSERT INTO leaderboard (id, name, score) VALUES (null, ?, ?)', [name, score], function (err) {
+                if (err) reject(err);
+                else resolve(this.lastID);
+            });
+        });
+    },
 };
 
 export default { db, dbQueries };
