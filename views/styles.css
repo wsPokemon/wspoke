@@ -82,6 +82,11 @@ body {
   color: white;
 }
 
+.btn.terciary {
+  background: #34db9b;
+  color: white;
+}
+
 .btn.icon {
   padding: 0.5rem;
   background: transparent;
@@ -268,8 +273,9 @@ body {
   background: rgba(0,0,0,0.5);
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 100;
 }
+
 
 .modal {
   background: white;
@@ -293,6 +299,7 @@ body {
 /* Modal de fin de juego */
 .game-over-modal .modal-content {
   text-align: center;
+  z-index: 200;
 }
 
 .final-score {
@@ -307,6 +314,14 @@ body {
   justify-content: center;
   margin-top: 2rem;
 }
+
+/* Modal de guardar puntaje*/
+
+.save-points-modal .modal-content {
+  text-align: center;
+  z-index: 300;
+}
+
 
 /* Instrucciones */
 .instructions-list {

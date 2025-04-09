@@ -6,13 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modal = {
         overlay: document.querySelector('.modal-overlay'),
+        saveUser: document.querySelector('.save-points-modal'),
         gameOver: document.querySelector('.game-over-modal'),
         closeButtons: document.querySelectorAll('.close-modal')
     };
 
     const gameState = {
         score: 0,
-        timeLeft: 180, // 3 minutos en segundos
+        timeLeft: 2, // 3 minutos en segundos
         currentWord: '',
         usedWords: new Set(),
         timer: null,
@@ -32,9 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Control del modal
     function toggleModal(show, modalType = 'default') {
-        if (modalType === 'gameOver') {
+        if (modalType === 'saveUser') {
+            modal.saveUser.style.display = show ? 'flex' : 'none';
+            document.getElementsByClassName('.save-points-modal').onmouseover = DragEvent;
+        } 
+        else if(modalType === 'gameOver') {
             modal.gameOver.style.display = show ? 'flex' : 'none';
-        } else {
+        }
+        else {
             modal.overlay.style.display = show ? 'flex' : 'none';
         }
     }
@@ -186,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function endGame() {
         clearInterval(gameState.timer);
         document.getElementById('final-score').textContent = gameState.score;
-        toggleModal(true, 'gameOver');
+        toggleModal(true, 'saveUser');
     }
 
     // Mezclar letras
@@ -227,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             gameState.score = 0;
-            gameState.timeLeft = 180;
+            gameState.timeLeft = 10;
             gameState.currentWord = '';
             gameState.usedWords.clear();
             gameState.selectedCells = [];
@@ -235,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('timer').textContent = '03:00';
             document.querySelector('.word-preview').textContent = '';
             document.querySelector('.words-list').innerHTML = '';
+            toggleModal(false, 'saveUser');
             toggleModal(false, 'gameOver');
             
             await initGame();
@@ -258,24 +265,45 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.submit-word-btn').addEventListener('click', validateWord);
     document.querySelector('.shuffle-btn').addEventListener('click', shuffleLetters);
 
-    // Keyboard shortcuts (R: Reiniciar palabra, E: Validar palabra) descomentar para habilitar
-    // document.addEventListener('keypress', function (e) {
-    //         if (document.getElementsByClassName('.game-screen') && e.key === 'r') {
-    //             shuffleLetters();
-    //         }
-    //         if (document.getElementsByClassName('.game-screen') && e.key === 'e') {
-    //             validateWord();
-    //         }
-    // });
-    
+    // Keyboard shortcuts (Esc: para salir del modal de instrucciones, R: shuffle de las letras, E: Validar palabra) descomentar para habilitar
+    document.addEventListener('keyup', function (e) {
+            if( e.key === 'Escape') {
+                console.log('Esc');
+                toggleModal(false, 'closeButtons');
+            }
+            if (document.getElementsByClassName('.game-screen') && e.key === 'r') {
+                shuffleLetters();
+            }
+            if (document.getElementsByClassName('.game-screen') && e.key === 'e') {
+                validateWord();
+            }
+    });
 
     document.querySelector('.play-again-btn').addEventListener('click', () => {
         resetGame();
     });
 
-    document.querySelector('.menu-btn').addEventListener('click', () => {
+    document.querySelector('.play-again-btn-over').addEventListener('click', () => {
         resetGame();
+    });
+    document.querySelector('.menu-btn').addEventListener('click', () => {
+
         showScreen('start-screen');
+        toggleModal(false, 'saveUser');
+
+    });
+    
+    document.querySelector('.menu-btn-over').addEventListener('click', () => {
+
+        showScreen('start-screen');
+        toggleModal(false, 'gameOver'); 
+
+    });
+
+    document.querySelector('.save-btn').addEventListener('click', async () => {
+        console.log((document.getElementById('player-name').value));
+        toggleModal(false, 'saveUser');
+        toggleModal(true, 'gameOver');
     });
 
     document.querySelectorAll('.instructions-btn, .help-btn').forEach(btn => {
@@ -288,9 +316,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modal.overlay.addEventListener('click', (e) => {
         if (e.target === modal.overlay) toggleModal(false);
-    });
-
-    modal.gameOver.addEventListener('click', (e) => {
-        if (e.target === modal.gameOver) toggleModal(false, 'gameOver');
     });
 });

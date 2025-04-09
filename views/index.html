@@ -83,7 +83,7 @@
     </div>
 
     <!-- Modal de Instrucciones -->
-    <div class="modal-overlay">
+    <div class="modal-overlay instrucciones-modal">
         <div class="modal">
             <div class="modal-header">
                 <h2>Instrucciones del Juego</h2>
@@ -117,7 +117,37 @@
             </div>
         </div>
     </div>
-
+<!-- Modal de guardado de puntaje -->
+<div class="modal-overlay save-points-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>"¿Quieres guardar tu puntaje? 😊" </h2>
+            <div class="final-score">
+                <span class="material-icons">emoji_events</span>
+                <span id="final-score">0</span>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="save-points-form">
+                <input type="text" id="player-name" placeholder="Ingresa tu nombre" required>
+            </div>
+            <div class="save-points-buttons">
+                <button class="btn primary play-again-btn">
+                    <span class="material-icons">replay</span>
+                    Jugar de Nuevo
+                </button>
+                <button class="btn secondary menu-btn">
+                    <span class="material-icons">home</span>
+                    Menú Principal
+                </button>
+                <button class="btn terciary save-btn">
+                    <span class="material-icons">check_circle</span>
+                    Guardar Puntaje
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- Modal de Fin de Juego -->
     <div class="modal-overlay game-over-modal">
         <div class="modal">
@@ -130,11 +160,11 @@
             </div>
             <div class="modal-content">
                 <div class="game-over-buttons">
-                    <button class="btn primary play-again-btn">
+                    <button class="btn primary play-again-btn-over">
                         <span class="material-icons">replay</span>
                         Jugar de Nuevo
                     </button>
-                    <button class="btn secondary menu-btn">
+                    <button class="btn secondary menu-btn-over">
                         <span class="material-icons">home</span>
                         Menú Principal
                     </button>

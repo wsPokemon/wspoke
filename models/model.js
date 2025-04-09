@@ -1,7 +1,8 @@
 import dbModule from '../db/db.js';
 
 class Model {
-    
+    /* Seccion para las funcionalidades del juego funciones en si*/
+
     //Función para obtener letras balanceadas dentro de la cuadrícula
     async generateBalancedLetters(availablePokemons) {
       const gridSize = 6;
@@ -34,13 +35,14 @@ class Model {
   }
   
   // Función para verificar si hay Pokémon disponibles con las letras actuales
-  checkAvailablePokemons(letters, availablePokemons) {
+    checkAvailablePokemons(letters, availablePokemons) {
       const letterSet = new Set(letters.map(l => l.toLowerCase()));
       return availablePokemons.filter(pokemon => 
        pokemon.name.toLowerCase().split('').every(letter => letterSet.has(letter))
       );
   }
-    
+
+
 }
 
 export default new Model();
