@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let isActive = false; // Variable para controlar el estado del juego
     const screens = {
         start: document.querySelector('.start-screen'),
         game: document.querySelector('.game-screen')
@@ -29,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function showScreen(screenName) {
         Object.values(screens).forEach(screen => screen.classList.remove('active'));
         document.querySelector(`.${screenName}`).classList.add('active');
+        if(screenName === 'game-screen') {
+            isActive = true;
+        }
+        else {
+            isActive = false;
+        }
     }
 
     // Control del modal
@@ -192,6 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function endGame() {
         clearInterval(gameState.timer);
         document.getElementById('final-score').textContent = gameState.score;
+        isActive = false; // Desactivar el juego
+        toggleModal(false);
         toggleModal(true, 'saveUser');
     }
 
@@ -265,19 +274,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.submit-word-btn').addEventListener('click', validateWord);
     document.querySelector('.shuffle-btn').addEventListener('click', shuffleLetters);
 
-    // Keyboard shortcuts (Esc: para salir del modal de instrucciones, R: shuffle de las letras, E: Validar palabra) descomentar para habilitar
+    //Cerrar el modal de instrucciones al presionar Esc
+    document.querySelector('.instrucciones-modal').addEventListener('keyup',  (e) => {
+        if (e.key === 'Escape') {
+            toggleModal(false);
+        }
+    });
+
+    // Keyboard shortcuts (R: shuffle de las letras, E: Validar palabra) descomentar para habilitar
     document.addEventListener('keyup', function (e) {
-            if( e.key === 'Escape') {
-                console.log('Esc');
-                toggleModal(false, 'closeButtons');
-            }
-            if (document.getElementsByClassName('.game-screen') && e.key === 'r') {
+            if(!isActive) return; // Si el juego no está activo, no hacemos nada
+           
+            if (e.key === 'r') {
                 shuffleLetters();
             }
-            if (document.getElementsByClassName('.game-screen') && e.key === 'e') {
+            if (e.key === 'e') {
                 validateWord();
             }
     });
+
 
     document.querySelector('.play-again-btn').addEventListener('click', () => {
         resetGame();
@@ -290,13 +305,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showScreen('start-screen');
         toggleModal(false, 'saveUser');
-
+        toggleModal(false, 'overlay'); 
+      
     });
     
     document.querySelector('.menu-btn-over').addEventListener('click', () => {
 
         showScreen('start-screen');
-        toggleModal(false, 'gameOver'); 
+        toggleModal(false, 'gameOver');
+        toggleModal(false, 'overlay'); 
 
     });
 
@@ -307,7 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('.instructions-btn, .help-btn').forEach(btn => {
-        btn.addEventListener('click', () => toggleModal(true));
+         btn.addEventListener('click', () => {
+             toggleModal(true)
+             document.querySelector('.instrucciones-modal').focus();
+         });
     });
 
     modal.closeButtons.forEach(btn => {
