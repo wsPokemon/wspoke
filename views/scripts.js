@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const gameState = {
         score: 0,
-        timeLeft: 2, // 3 minutos en segundos
+        timeLeft: 180, // 3 minutos en segundos
         currentWord: '',
         usedWords: new Set(),
         timer: null,
@@ -198,12 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Finalizar juego
     function endGame() {
         clearInterval(gameState.timer);
-        document.getElementById('final-score').textContent = gameState.score;
+        document.getElementById('final-score').textContent = gameState.score; // Para saveUser
+        document.getElementById('final-score-game-over').textContent = gameState.score; // Para gameOver
         isActive = false; // Desactivar el juego
         toggleModal(false);
         toggleModal(true, 'saveUser');
-    }
-
+}
     // Mezclar letras
     async function shuffleLetters() {
 
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             gameState.score = 0;
-            gameState.timeLeft = 10;
+            gameState.timeLeft = 180;
             gameState.currentWord = '';
             gameState.usedWords.clear();
             gameState.selectedCells = [];
@@ -284,7 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Keyboard shortcuts (R: shuffle de las letras, E: Validar palabra) descomentar para habilitar
     document.addEventListener('keyup', function (e) {
             if(!isActive) return; // Si el juego no está activo, no hacemos nada
-           
+            if (e.key === 's') {
+                resetWord();
+            }
             if (e.key === 'r') {
                 shuffleLetters();
             }
