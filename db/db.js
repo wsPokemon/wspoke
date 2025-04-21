@@ -2,6 +2,7 @@ import { join } from 'path';
 import sqlite3 from "sqlite3";
 
 
+
 const dirname = import.meta.dirname
 sqlite3.verbose();
 
@@ -80,34 +81,41 @@ const dbQueries = {
     },
 
     //obtener el score del leaderboard por nombre
-    getScoreByName: (name) => {
+    getScoreByName: (username) => {
         return new Promise((resolve, reject) => {
-            db.get('SELECT score FROM leaderboard WHERE name = ?', [name], (err, row) => {
+            db.get('SELECT score FROM leaderboard WHERE username = ?', [username], (err, row) => {
                 if (err) reject(err);
                 else resolve(row);
             });
         });
     },
-
-    // Obtener leaderboard
-    getLeaderboard: () => {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM leaderboard ORDER BY score LIMIT 10', (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-    },
-
+   
     // Insertar nuevo registro en el leaderboard
-    insertLeaderboard: (name, score) => {
+    insertLeaderboard: (username, score) => {
         return new Promise((resolve, reject) => {
-            db.run('INSERT INTO leaderboard (id, name, score) VALUES (null, ?, ?)', [name, score], function (err) {
-                if (err) reject(err);
-                else resolve(this.lastID);
-            });
+            db.run(
+                'INSERT INTO leaderboard (username, score) VALUES (?, ?)',
+                [username, score],
+                function (err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                }
+            );
         });
     },
+
+    // Obtener los 5 mejores puntajes del leaderboard
+    getTopLeaderboard: () => {
+        return new Promise((resolve, reject) => {
+            db.all(
+                'SELECT username, score FROM leaderboard ORDER BY score DESC LIMIT 5',
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    }
 };
 
 export default { db, dbQueries };

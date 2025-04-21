@@ -320,10 +320,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelector('.save-btn').addEventListener('click', async () => {
-        console.log((document.getElementById('player-name').value));
-        toggleModal(false, 'saveUser');
-        toggleModal(true, 'gameOver');
+        const playerName = document.getElementById('player-name').value.trim();
+        const score = gameState.score;
+
+        if (!playerName) {
+            alert('Por favor, ingresa un nombre.');
+            return;
+        }
+
+        try {
+            // Guardar el puntaje en la base de datos
+            const response = await fetch('http://localhost:3000/api/leaderboard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: playerName, score })
+            });
+
+            if (response.ok) {
+                const leaderboard = await response.json();
+                updateLeaderboard(leaderboard);
+                toggleModal(false, 'saveUser');
+                toggleModal(true, 'gameOver');
+            } else {
+                console.error('Error al guardar el puntaje.');
+            }
+        } catch (error) {
+            console.error('Error al guardar el puntaje:', error);
+        }
     });
+
+    // Actualizar el leaderboard en el modal
+    function updateLeaderboard(leaderboard) {
+        const leaderboardRows = document.getElementById('leaderboard-rows');
+        leaderboardRows.innerHTML = '';
+
+        leaderboard.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${entry.username}</td>
+                <td>${entry.score}</td>
+            `;
+            leaderboardRows.appendChild(row);
+        });
+    }
 
     document.querySelectorAll('.instructions-btn, .help-btn').forEach(btn => {
          btn.addEventListener('click', () => {
