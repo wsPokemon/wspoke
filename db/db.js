@@ -90,17 +90,41 @@ const dbQueries = {
         });
     },
    
-    // Insertar nuevo registro en el leaderboard
-    insertLeaderboard: (username, score) => {
+    // Insertar o actualizar registro en el leaderboard con uuid
+    insertLeaderboard: (username, score, uuid) => {
         return new Promise((resolve, reject) => {
-            db.run(
-                'INSERT INTO leaderboard (username, score) VALUES (?, ?)',
-                [username, score],
-                function (err) {
-                    if (err) reject(err);
-                    else resolve(this.lastID);
+            db.get('SELECT uuid, score FROM leaderboard WHERE username = ?', [username], (err, row) => {
+                if (err) return reject(err);
+                if (!row) {
+                    // No existe, insertar
+                    db.run(
+                        'INSERT INTO leaderboard (username, score, uuid) VALUES (?, ?, ?)',
+                        [username, score, uuid],
+                        function (err) {
+                            if (err) reject(err);
+                            else resolve({ action: 'inserted', lastID: this.lastID });
+                        }
+                    );
+                } else if (row.uuid === uuid) {
+                    // Es el mismo usuario, solo actualiza si el score es mayor
+                    if (score > row.score) {
+                        db.run(
+                            'UPDATE leaderboard SET score = ? WHERE username = ?',
+                            [score, username],
+                            function (err) {
+                                if (err) reject(err);
+                                else resolve({ action: 'updated', lastID: this.lastID });
+                            }
+                        );
+                    } else {
+                        // Score menor o igual, rechaza
+                        reject({ code: 'LOW_SCORE', message: 'El nuevo puntaje no supera el anterior.' });
+                    }
+                } else {
+                    // Usuario existe pero uuid diferente
+                    reject({ code: 'NAME_TAKEN', message: 'El nombre ya está registrado por otro jugador.' });
                 }
-            );
+            });
         });
     },
 

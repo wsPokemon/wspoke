@@ -23,8 +23,8 @@ async function initGame() {
             grid.appendChild(cell);
         });
         startTimer();
-    } catch (error) {
-        console.error('Error al inicializar el juego:', error);
+    } catch {
+        console.error('Error al inicializar el juego:');
     }
 }
 
@@ -73,18 +73,20 @@ async function validateWord() {
         } else {
             showValidationMessage('Debes escribir el nombre completo de un Pokémon', false);
         }
-    } catch (error) {
-        console.error('Error al validar la palabra:', error);
+    } catch {
+        console.error('Error al validar la palabra:');
         showValidationMessage('Error al validar', false);
     }
 }
 
 function endGame() {
     clearInterval(gameState.timer);
+    gameState.timer = null;
     document.getElementById('final-score').textContent = gameState.score;
     document.getElementById('final-score-game-over').textContent = gameState.score;
     isActive = false;
-    toggleModal(false);
+    toggleModal(false, 'gameOver');
+    toggleModal(false, 'saveUser');
     toggleModal(true, 'saveUser');
 }
 
@@ -105,13 +107,15 @@ async function shuffleLetters() {
         });
         resetWord();
         showValidationMessage('¡Nuevas letras generadas!', true);
-    } catch (error) {
-        console.error('Error al mezclar letras:', error);
+    } catch {
+        console.error('Error al mezclar letras:');
         showValidationMessage('Error al mezclar letras', false);
     }
 }
 
 async function resetGame() {
+    clearInterval(gameState.timer);
+    gameState.timer = null;
     try {
         await fetch('http://localhost:3000/api/reset', { method: 'POST' });
         resetGameState();
@@ -122,12 +126,13 @@ async function resetGame() {
         toggleModal(false, 'saveUser');
         toggleModal(false, 'gameOver');
         await initGame();
-    } catch (error) {
-        console.error('Error al reiniciar el juego:', error);
+    } catch {
+        console.error('Error al reiniciar el juego:');
     }
 }
 
 function startTimer() {
+    clearInterval(gameState.timer);
     gameState.timer = setInterval(() => {
         gameState.timeLeft--;
         const minutes = Math.floor(gameState.timeLeft / 60);
@@ -155,8 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelector('.back-btn').addEventListener('click', () => {
         clearInterval(gameState.timer);
+        gameState.timer = null;
         showScreen('start-screen');
         isActive = false;
+        toggleModal(false, 'saveUser');
+        toggleModal(false, 'gameOver');
     });
     document.querySelector('.reset-word-btn').addEventListener('click', resetWord);
     document.querySelector('.submit-word-btn').addEventListener('click', validateWord);
@@ -178,16 +186,48 @@ document.addEventListener('DOMContentLoaded', () => {
             isActive = true;
         }
     });
-    document.querySelector('.play-again-btn').addEventListener('click', resetGame);
-    document.querySelector('.play-again-btn-over').addEventListener('click', resetGame);
+    document.querySelector('.play-again-btn').addEventListener('click', () => {
+        resetGame();
+        showScreen('game-screen');
+        isActive = true;
+    });
+    document.querySelector('.play-again-btn-over').addEventListener('click', () => {
+        resetGame();
+        showScreen('game-screen');
+        isActive = true;
+    });
     document.querySelector('.menu-btn').addEventListener('click', () => {
+        clearInterval(gameState.timer);
+        gameState.timer = null;
         showScreen('start-screen');
         toggleModal(false, 'saveUser');
+        toggleModal(false, 'gameOver');
         toggleModal(false, 'overlay');
         isActive = false;
     });
     document.querySelector('.menu-btn-over').addEventListener('click', () => {
+        clearInterval(gameState.timer);
+        gameState.timer = null;
         showScreen('start-screen');
+        toggleModal(false, 'saveUser');
+        toggleModal(false, 'gameOver');
+        toggleModal(false, 'overlay');
+        isActive = false;
+    });
+
+    // Mostrar instrucciones desde menú principal
+    document.querySelector('.instructions-btn').addEventListener('click', () => {
+        toggleModal(true);
+        document.querySelector('.instrucciones-modal').focus();
+    });
+    // Mostrar instrucciones desde game screen
+    document.querySelector('.help-btn').addEventListener('click', () => {
+        toggleModal(true);
+        document.querySelector('.instrucciones-modal').focus();
+    });
+        gameState.timer = null;
+        showScreen('start-screen');
+        toggleModal(false, 'saveUser');
         toggleModal(false, 'gameOver');
         toggleModal(false, 'overlay');
         isActive = false;
@@ -196,32 +236,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const playerName = document.getElementById('player-name').value.trim();
         const score = gameState.score;
         if (!playerName) {
-            alert('Por favor, ingresa un nombre.');
+            showValidationMessage('Por favor, ingresa un nombre.', false);
+            return;
+        }
+        // Generar o recuperar UUID único del jugador
+        let uuid = localStorage.getItem('wordshake_uuid');
+        if (!uuid) {
+            uuid = crypto.randomUUID();
+            localStorage.setItem('wordshake_uuid', uuid);
+        }
+        if (score <= 0) {
+            showValidationMessage('No puedes guardar un puntaje de 0. ¡Juega para obtener puntos!', false);
             return;
         }
         try {
             const response = await fetch('http://localhost:3000/api/leaderboard', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: playerName, score })
+                body: JSON.stringify({ name: playerName, score, uuid })
             });
             if (response.ok) {
-                const leaderboard = await response.json();
-                updateLeaderboard(leaderboard);
+                await loadMainLeaderboard('leaderboard-rows');
                 toggleModal(false, 'saveUser');
                 toggleModal(true, 'gameOver');
+            } else if (response.status === 409) {
+                const data = await response.json();
+                showValidationMessage(data.error || 'Error al guardar el puntaje', false);
+            } else if (response.status === 400) {
+                const data = await response.json();
+                showValidationMessage(data.error || 'No puedes guardar un puntaje de 0.', false);
             } else {
-                console.error('Error al guardar el puntaje.');
+                showValidationMessage('Error al guardar el puntaje', false);
             }
-        } catch (error) {
-            console.error('Error al guardar el puntaje:', error);
+        } catch {
+            showValidationMessage('Error al guardar el puntaje', false);
         }
-    });
-    document.querySelectorAll('.instructions-btn, .help-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            toggleModal(true);
-            document.querySelector('.instrucciones-modal').focus();
-        });
     });
 
     // Leaderboard desde el menú principal
@@ -232,20 +281,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Volver al menú principal desde leaderboard
     document.querySelector('.back-to-menu-btn').addEventListener('click', () => {
+        clearInterval(gameState.timer);
+        gameState.timer = null;
         showScreen('start-screen');
+        toggleModal(false, 'saveUser');
+        toggleModal(false, 'gameOver');
         isActive = false;
     });
 
     // Cargar leaderboard principal
-    async function loadMainLeaderboard() {
+    async function loadMainLeaderboard(elementId = 'main-leaderboard-rows') {
         try {
             const response = await fetch('http://localhost:3000/api/leaderboard', {
                 method: 'GET'
             });
             const leaderboard = await response.json();
-            updateLeaderboard(leaderboard, 'main-leaderboard-rows');
-        } catch (error) {
-            console.error('Error al cargar el leaderboard:', error);
+            updateLeaderboard(leaderboard, elementId);
+        } catch {
+            console.error('Error al cargar el leaderboard:');
         }
     }
 
@@ -257,5 +310,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Inicializar pantalla de inicio
     showScreen('start-screen');
-});
 
