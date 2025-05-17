@@ -25,6 +25,10 @@
                 <span class="material-icons">help_outline</span>
                 Instrucciones
             </button>
+            <button class="btn tertiary leaderboard-btn">
+                <span class="material-icons">leaderboard</span>
+                Leaderboard
+            </button>
         </div>
 
         <div class="footer">
@@ -32,7 +36,32 @@
             <div class="credits">Creado por Manifesto dei rospi</div>
         </div>
     </div>
-    
+
+    <!-- Pantalla de Leaderboard -->
+    <div class="screen leaderboard-screen">
+        <div class="header">
+            <h1 class="title">Leaderboard</h1>
+            <div class="decorative-line"></div>
+        </div>
+        <div class="leaderboard-container">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Posición</th>
+                        <th>Nombre</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody id="main-leaderboard-rows">
+                    <!-- Las filas del leaderboard se llenarán dinámicamente -->
+                </tbody>
+            </table>
+            <button class="btn secondary back-to-menu-btn">
+                <span class="material-icons">home</span>
+                Menú Principal
+            </button>
+        </div>
+    </div>
 
     <!-- Pantalla de Juego -->
     <div class="screen game-screen">
@@ -40,6 +69,10 @@
         <div class="game-header">
             <button class="btn icon back-btn">
                 <span class="material-icons">arrow_back</span>
+            </button>
+            <button class="btn tertiary replay-btn">
+                <span class="material-icons">replay</span>
+                Volver a Jugar
             </button>
             <div class="game-info">
                 <div class="score-box">
@@ -191,6 +224,8 @@
         </div>
     </div>
 
-    <script src="scripts.js"></script>
+    <script type="module" src="model.js"></script>
+<script type="module" src="view.js"></script>
+<script type="module" src="controller.js"></script>
 </body>
 </html>

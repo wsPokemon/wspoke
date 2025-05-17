@@ -66,5 +66,28 @@ export class ApiController {
         ApiModel.ResetGame();
         res.json({ success: true });
     }
-}
 
+    // POST /leaderboard
+    static async leaderboard(req, res) {
+        const { name, score } = req.body;
+        try {
+            await dbModule.dbQueries.insertLeaderboard(name, score);
+            const leaderboard = await dbModule.dbQueries.getTopLeaderboard();
+            res.json(leaderboard);
+        } catch (error) {
+            console.error('Error al manejar el leaderboard:', error);
+            res.status(500).json({ error: 'Error al manejar el leaderboard' });
+        }
+    }
+
+    // GET /leaderboard
+    static async getLeaderboard(req, res) {
+        try {
+            const leaderboard = await dbModule.dbQueries.getTopLeaderboard();
+            res.json(leaderboard);
+        } catch (error) {
+            console.error('Error al obtener el leaderboard:', error);
+            res.status(500).json({ error: 'Error al obtener el leaderboard' });
+        }
+    }
+}
