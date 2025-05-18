@@ -12,7 +12,7 @@ export const gameState = {
 
 export function resetGameState() {
     gameState.score = 0;
-    gameState.timeLeft = 10;
+    gameState.timeLeft = 180;
     gameState.currentWord = '';
     gameState.usedWords = new Set();
     gameState.timer = null;
