@@ -577,3 +577,73 @@ z-index: 2;
   height: auto;
   
 }
+@keyframes tableGlow {
+  0% {
+    box-shadow: 0 0 5px #ff6347, 0 0 8px #ff6347;
+  }
+  50% {
+    box-shadow: 0 0 8px #ff6347, 0 0 10px #fbae17;
+  }
+  100% {
+    box-shadow: 0 0 8px #ff6347, 0 0 5px #ff6347;
+  }
+}
+
+/* Contenedor general */
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Press Start 2P', cursive; /* Retro style */
+  color: #333;
+}
+
+/* Título */
+.leaderboard-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* Tabla */
+.leaderboard-table {
+  width: 90%;
+  max-width: 600px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  animation: tableGlow 1.5s infinite alternate;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Encabezado de la tabla */
+.leaderboard-table th {
+  background-color: #f3610cc9; 
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px #000;
+}
+
+/* Filas de la tabla */
+.leaderboard-table td {
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.leaderboard-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
