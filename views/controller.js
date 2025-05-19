@@ -51,12 +51,17 @@ function selectLetter(cell) {
 }
 
 function resetWord() {
+    if (gameState.selectedCells.length === 0) {
+        showValidationMessage('No hay letras seleccionadas para reiniciar', false);
+        return;
+    }
     gameState.selectedCells.forEach(cell => {
         cell.classList.remove('selected');
     });
     gameState.selectedCells = [];
     gameState.currentWord = '';
     document.querySelector('.word-preview').textContent = '';
+    showValidationMessage('Palabra reiniciada', true);
 }
 
 async function validateWord() {
@@ -89,6 +94,8 @@ async function validateWord() {
     } catch {
         console.error('Error al validar la palabra:');
         showValidationMessage('Error al validar', false);
+
+        
     }
 }
 
@@ -138,9 +145,11 @@ async function resetGame() {
         document.querySelector('.words-list').innerHTML = '';
         toggleModal(false, 'saveUser');
         toggleModal(false, 'gameOver');
+        showValidationMessage('¡Juego reiniciado! Nuevas letras generadas', true);
         await initGame();
     } catch {
         console.error('Error al reiniciar el juego:');
+        showValidationMessage('Error al reiniciar el juego', false);
     }
 }
 
