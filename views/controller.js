@@ -29,10 +29,23 @@ async function initGame() {
 }
 
 function selectLetter(cell) {
-    if (cell.classList.contains('selected')) return;
-    cell.classList.add('selected');
-    gameState.currentWord += cell.textContent;
-    gameState.selectedCells.push(cell);
+    const lastSelected = gameState.selectedCells[gameState.selectedCells.length - 1];
+    if (cell.classList.contains('selected')) {
+        // Solo permite deseleccionar si es la última seleccionada
+        if (cell === lastSelected) {
+            cell.classList.remove('selected');
+            gameState.selectedCells.pop();
+            // Quitar la última letra de currentWord
+            gameState.currentWord = gameState.currentWord.slice(0, -1);
+        }
+        // Si no es la última, no hace nada
+    } else {
+        // Seleccionar la letra
+        cell.classList.add('selected');
+        gameState.currentWord += cell.textContent;
+        gameState.selectedCells.push(cell);
+    }
+    // Actualizar el preview
     const preview = document.querySelector('.word-preview');
     preview.textContent = gameState.currentWord;
 }
